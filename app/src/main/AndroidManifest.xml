@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- NFCハードウェアにアクセスするためのNFC<uses-permission> -->
+    <uses-permission android:name="android.permission.NFC" />
+    <!-- NFCハードウェアを備えたデバイスのみアプリがGoogle Playに表示　-->
+    <uses-feature android:name="android.hardware.nfc" android:required="true" />
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.NFC_sample"
+        tools:targetApi="31">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:theme="@style/Theme.NFC_sample">
+            <intent-filter>
+                <!-- NDEF形式のNFCタグにタッチするとアクション発行　-->
+                <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
+                <!-- 明示的な命令がない限りNFCは起動しない。LAUNCHERだとアプリ起動時にNFC起動　-->
+                <category android:name="android.intent.category.DEFAULT"/>
+                <!-- 単純な文字列データ -->
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.nfc.action.TECH_DISCOVERED"/>
+            </intent-filter>
+            <!-- meta-dataで指定されたxmlファイルに基づいて、検出されたNFCタグのテクノロジー -->
+            <meta-data android:name="android.nfc.action.TECH_DISCOVERED"
+                android:resource="@xml/nfc_tech_filter" />
+        </activity>
+    </application>
+
+</manifest>
